@@ -11,21 +11,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import environ
 import os
+CHAPA_SECRET_KEY = os.getenv('CHAPA_SECRET_KEY')
+
 
 env = environ.Env()
 environ.Env.read_env()
-
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST', default='127.0.0.1'),
-        'PORT': env('DB_PORT', default='3306'),
-    }
-}
 
 
 from pathlib import Path
