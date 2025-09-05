@@ -11,29 +11,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import environ
 import os
-
-env = environ.Env()
-environ.Env.read_env()
-
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST', default='127.0.0.1'),
-        'PORT': env('DB_PORT', default='3306'),
-    }
-}
-
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+# 2️⃣ Initialize django-environ
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -44,7 +29,10 @@ SECRET_KEY = 'django-insecure-e@d8edl^s3=jag^(8q&q_k=@5_2yu&)go=oq0pud2@ags)k$ea
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+# 4️⃣ Database
+DATABASES = {
+    "default": env.db(default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"),
+}
 
 # Application definition
 
@@ -72,7 +60,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
-
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 ROOT_URLCONF = 'alx_travel_app.urls'
 
 TEMPLATES = [
@@ -144,3 +133,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CELERY_BROKER_URL = 'amqp://localhost'
